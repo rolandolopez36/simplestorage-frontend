@@ -23,9 +23,24 @@ async function connect() {
     }
     const accounts = await ethereum.request({ method: "eth_accounts" });
     console.log(accounts);
+    await checkEthBalance(accounts[0]);
   } else {
     connectButton.innerHTML = "Please install MetaMask";
     console.log("MetaMask no está instalado");
+  }
+}
+
+async function checkEthBalance(account) {
+  if (window.ethereum) {
+    try {
+      const balance = await window.ethereum.request({
+        method: "eth_getBalance",
+        params: [account, "latest"],
+      });
+      console.log("Eth Balance", ethers.utils.formatEther(balance));
+    } catch (err) {
+      console.error("Error al obtener el balance de ETH:", err);
+    }
   }
 }
 
